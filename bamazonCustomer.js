@@ -5,16 +5,14 @@
  * (c) 2018 Richard Cyrus <richard.cyrus@rcyrus.com>
  */
 
-const { pool } = require('./database');
 const inquirer = require('inquirer');
 const Table = require('easy-table');
+const { pool } = require('./database');
 
 /**
  * Display the items that are available for sale.
- *
- * @param conn The database pool or connection object.
  */
-function displayProducts(conn) {
+function displayProducts() {
     const query = [
         'SELECT item_id,',
         'product_name,',
@@ -24,7 +22,7 @@ function displayProducts(conn) {
         'WHERE stock_quantity > 0'
     ].join(' ');
 
-    conn.query(query, function(error, results) {
+    pool.query(query, function(error, results) {
         if (error) throw error;
 
         const products = results.map((product) => {
@@ -48,7 +46,7 @@ function displayProducts(conn) {
         console.log('\nProduct List\n');
         console.log(t.toString());
 
-        whatToPurchase(products, conn);
+        whatToPurchase(products);
     });
 }
 
@@ -57,12 +55,12 @@ function displayProducts(conn) {
  *
  * @param products A subset of the product attributes from the
  *                  displayProducts() call.
- * @param conn The database pool or connection object.
  */
-function whatToPurchase(products, conn) {
+function whatToPurchase(products) {
     const updateStmt = [
         'UPDATE products',
-        'SET stock_quantity = stock_quantity - ?',
+        'SET stock_quantity = stock_quantity - ?,',
+        'product_sales = product_sales + ?',
         'WHERE item_id = ?'
     ].join(' ');
 
@@ -114,28 +112,27 @@ function whatToPurchase(products, conn) {
                 return itemId === product.id;
             });
 
-            const total = (quantity * item.price)
-                .toLocaleString(
-                    'en-US',
-                    { style: 'currency', currency: 'USD' }
-                );
+            const total = (quantity * item.price);
 
-            conn.query(updateStmt, [quantity, itemId], function(error) {
+            const displayTotal = total.toLocaleString(
+                'en-US',
+                { style: 'currency', currency: 'USD' }
+            );
+
+            pool.query(updateStmt, [quantity, total, itemId], function(error) {
                 if (error) throw error;
 
                 console.log('\nThank you for your purchase!');
-                console.log(`Your total is: ${total}`);
-                action(conn);
+                console.log(`Your total is: ${displayTotal}`);
+                action();
             });
         });
 }
 
 /**
  * Determine the next steps after the customer has completed a purchase.
- *
- * @param conn The database pool or connection object.
  */
-function action(conn) {
+function action() {
     console.log('\n');
     inquirer
         .prompt([{
@@ -150,14 +147,14 @@ function action(conn) {
         .then((answer) => {
             switch (answer.redirect) {
                 case 'purchase':
-                    displayProducts(conn);
+                    displayProducts();
                     break;
                 case 'exit':
-                    conn.end();
+                    pool.end();
                     break;
             }
         });
 }
 
 // Start the application interaction.
-displayProducts(pool);
+displayProducts();
