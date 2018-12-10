@@ -1,5 +1,7 @@
--- DROP DATABASE IF EXISTS bamazon;
-CREATE DATABASE IF NOT EXISTS bamazon CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+-- CREATE DATABASE IF NOT EXISTS bamazon CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci;
+-- CREATE USER 'bamazon'@'localhost' IDENTIFIED BY '';
+-- GRANT ALL PRIVILEGES ON bamazon.* TO 'bamazon'@'localhost';
+-- FLUSH PRIVILEGES;
 
 USE bamazon;
 
@@ -10,13 +12,6 @@ CREATE TABLE IF NOT EXISTS products (
     price DECIMAL(15,2),
     stock_quantity INT,
     PRIMARY KEY (item_id)
-) ENGINE = INNODB;
-
-CREATE TABLE IF NOT EXISTS departments (
-    department_id INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE,
-    department_name VARCHAR(35),
-    over_head_costs DECIMAL(5,2),
-    PRIMARY KEY ( department_id )
 ) ENGINE = INNODB;
 
 INSERT INTO products (product_name, department_name, price, stock_stock_quantity)
@@ -32,9 +27,3 @@ VALUES ('Snow Brush & Scraper', 'Automotive Parts & Accessories', 9.09, 15),
        ('Ring Video Doorbell 2', 'Electronics', 199.00, 150),
        ('Samsung 128GB MicroSD', 'Electronics', 41.99, 150),
        ('Apple iPad Wi-Fi 32GB', 'Electronics', 329.99, 100);
-
-INSERT INTO departments (department_name, over_head_costs)
-VALUES  ('Automotive Parts & Accessories', 5.20),
-        ('Books', 15.00),
-        ('CDs & Vinyl', 25.00),
-        ('Electronics', 3.00);
