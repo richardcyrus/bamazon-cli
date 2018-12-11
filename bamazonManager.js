@@ -70,7 +70,7 @@ function displayMenu() {
 }
 
 /**
- * Display to products table.
+ * Display the products table.
  *
  * @param products
  * @param title
@@ -261,7 +261,7 @@ function addProduct() {
                 validate: function(value) {
                     if (value.length > 50) {
                         return [
-                            'Please enter a name that is shorter than ',
+                            'Please enter a name that is shorter than¬',
                             '50 characters.'
                         ].join(' ');
                     }
