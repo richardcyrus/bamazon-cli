@@ -20,31 +20,11 @@ function displayMenu() {
                 name: 'manager',
                 message: 'Please choose an action.',
                 choices: [
-                    {
-                        key: 'v',
-                        name: 'View Products for Sale',
-                        value: 'viewSale'
-                    },
-                    {
-                        key: 'l',
-                        name: 'View Low Inventory',
-                        value: 'viewLowStock'
-                    },
-                    {
-                        key: 'm',
-                        name: 'Manage Stock Levels',
-                        value: 'modifyStock'
-                    },
-                    {
-                        key: 'a',
-                        name: 'Add New Product',
-                        value: 'addProduct'
-                    },
-                    {
-                        key: 'x',
-                        name: 'Exit',
-                        value: 'exit'
-                    }
+                    { name: 'View Products for Sale', value: 'viewSale' },
+                    { name: 'View Low Inventory', value: 'viewLowStock' },
+                    { name: 'Manage Stock Levels', value: 'modifyStock' },
+                    { name: 'Add New Product', value: 'addProduct' },
+                    { name: 'Exit', value: 'exit' }
                 ]
             }
         ])
@@ -64,7 +44,7 @@ function displayMenu() {
                     break;
                 case 'exit':
                     pool.end();
-                    break;
+                    process.exit();
             }
         });
 }
