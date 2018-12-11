@@ -64,68 +64,86 @@ function whatToPurchase(products) {
         'WHERE item_id = ?'
     ].join(' ');
 
+    const ask = 'Enter the Id of the item you wish to purchase: [Quit with Q]';
+
     inquirer
-        .prompt([
-            {
-                type: 'input',
-                name: 'itemId',
-                message: 'Enter the Id of the item you wish to purchase:',
-                validate: function(input) {
-                    const found = products.find(function(product) {
-                        return parseInt(input) === product.id;
-                    });
+        .prompt([{
+            type: 'input',
+            name: 'itemId',
+            message: ask,
+            validate: function(input) {
+                const found = products.find(function(product) {
+                    return parseInt(input) === product.id;
+                });
 
-                    if (found !== undefined) {
-                        return true;
-                    } else {
-                        return [
-                            'You have entered an invalid product Id.' +
-                            'Try again.',
-                        ].join(' ');
-                    }
-                }
-            },
-            {
-                type: 'input',
-                name: 'quantity',
-                message: 'How many do you wish to purchase?',
-                validate: function(input, answers) {
-                    const found = products.find((product) => {
-                        return parseInt(answers.itemId) === product.id;
-                    });
-
-                    if (found !== undefined && parseInt(input) <= found.qty) {
-                        return true;
-                    } else {
-                        return [
-                            'Your requested quantity is greater than the stock',
-                            `level (${found.qty}). Try again.`].join(' ');
-                    }
+                if (input.toUpperCase() === 'Q' || found !== undefined) {
+                    return true;
+                } else {
+                    return [
+                        'You have entered an invalid product Id.',
+                        'Try again.',
+                    ].join(' ');
                 }
             }
-        ])
+        }])
         .then((answers) => {
+            if (answers.itemId.toUpperCase() === 'Q') {
+                console.log('Goodbye!');
+                pool.end();
+                process.exit();
+            }
+
             const itemId = parseInt(answers.itemId);
-            const quantity = parseInt(answers.quantity);
 
-            const item = products.find((product) => {
-                return itemId === product.id;
+            const product = products.find((item) => {
+                return itemId === item.id;
             });
 
-            const total = (quantity * item.price);
+            inquirer
+                .prompt([
+                    {
+                        type: 'input',
+                        name: 'quantity',
+                        message: 'How many would you like? [Quit with Q]',
+                        validate: function(input) {
+                            if (input.toUpperCase() === 'Q' ||
+                                parseInt(input) <= product.qty) {
+                                return true;
+                            } else {
+                                return [
+                                    'Your requested quantity is greater',
+                                    'than the stock',
+                                    `level (${product.qty}). Try again.`
+                                ].join(' ');
+                            }
+                        }
+                    }
+                ])
+                .then((answers) => {
+                    if (answers.quantity.toUpperCase() === 'Q') {
+                        console.log('Goodbye!');
+                        pool.end();
+                        process.exit();
+                    }
+                    const quantity = parseInt(answers.quantity);
+                    const productSales = (quantity * product.price);
 
-            const displayTotal = total.toLocaleString(
-                'en-US',
-                { style: 'currency', currency: 'USD' }
-            );
+                    const total = productSales.toLocaleString(
+                        'en-US',
+                        { style: 'currency', currency: 'USD' }
+                    );
 
-            pool.query(updateStmt, [quantity, total, itemId], function(error) {
-                if (error) throw error;
+                    pool.query(
+                        updateStmt, [quantity, productSales, itemId],
+                        function(error) {
+                            if (error) throw error;
 
-                console.log('\nThank you for your purchase!');
-                console.log(`Your total is: ${displayTotal}`);
-                action();
-            });
+                            console.log('\nThank you for your purchase!');
+                            console.log(`Your total is: ${total}`);
+                            action();
+                        }
+                    );
+                });
         });
 }
 
@@ -151,7 +169,7 @@ function action() {
                     break;
                 case 'exit':
                     pool.end();
-                    break;
+                    process.exit();
             }
         });
 }
