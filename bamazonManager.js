@@ -100,12 +100,14 @@ function showProductsTable(products, title) {
  */
 function viewInventory(command, action) {
     const query = [
-        'SELECT item_id AS id,',
-        'product_name AS product,',
-        'department_name AS department,',
-        'price,' +
-        'stock_quantity AS quantity',
-        'FROM products'
+        'SELECT p.item_id AS id,',
+        'p.product_name AS product,',
+        'd.department_name AS department,',
+        'p.price,' +
+        'p.stock_quantity AS quantity',
+        'FROM products p',
+        'JOIN departments AS d ON p.department_id = d.department_id',
+        'ORDER BY p.item_id'
     ].join(' ');
 
     pool.query(query, function(error, results) {
@@ -128,13 +130,14 @@ function viewInventory(command, action) {
  */
 function viewLowStock() {
     const query = [
-        'SELECT item_id AS id,',
-        'product_name AS product,',
-        'department_name AS department,',
-        'price,' +
-        'stock_quantity AS quantity',
-        'FROM products',
-        'WHERE stock_quantity < 5'
+        'SELECT p.item_id AS id,',
+        'p.product_name AS product,',
+        'd.department_name AS department,',
+        'p.price,' +
+        'p.stock_quantity AS quantity',
+        'FROM products p',
+        'JOIN departments AS d ON p.department_id = d.department_id',
+        'WHERE p.stock_quantity < 5'
     ].join(' ');
 
     pool.query(query, function(error, results) {
@@ -219,7 +222,7 @@ function addProduct() {
     const insertStmt = [
         'INSERT INTO products(',
         'product_name,',
-        'department_name,',
+        'department_id,',
         'price,',
         'stock_quantity',
         ')',
@@ -227,8 +230,10 @@ function addProduct() {
     ].join(' ');
 
     const departmentsQuery = [
-        'SELECT DISTINCT department_name',
-        'FROM products',
+        'SELECT',
+        'department_id AS id,',
+        'department_name AS name',
+        'FROM departments',
         'ORDER BY department_name ASC'
     ].join(' ');
 
@@ -237,7 +242,12 @@ function addProduct() {
         if (error) throw error;
 
         results.forEach((dept) => {
-            departments.push(dept.department_name);
+            departments.push(
+                {
+                    name: dept.name,
+                    value: dept.id
+                }
+            );
         });
     });
 
@@ -260,7 +270,7 @@ function addProduct() {
             },
             {
                 type: 'list',
-                name: 'department',
+                name: 'department_id',
                 message: 'Choose from the following departments:',
                 choices: departments
             },
@@ -286,7 +296,7 @@ function addProduct() {
         .then((answers) => {
             const values = [
                 answers.product,
-                answers.department,
+                answers.department_id,
                 answers.price,
                 answers.stock
             ];
