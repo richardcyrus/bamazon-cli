@@ -21,25 +21,12 @@ function displayMenu() {
                 message: 'Please choose an action.',
                 choices: [
                     {
-                        key: 'l',
-                        name: 'List Departments',
-                        value: 'listDepartments'
-                    },
-                    {
-                        key: 'v',
                         name: 'View Products Sales by Department',
                         value: 'departmentSummary'
                     },
-                    {
-                        key: 'a',
-                        name: 'Add New Department',
-                        value: 'addDepartment'
-                    },
-                    {
-                        key: 'x',
-                        name: 'Exit',
-                        value: 'exit'
-                    }
+                    { name: 'List Departments', value: 'listDepartments' },
+                    { name: 'Add New Department', value: 'addDepartment' },
+                    { name: 'Exit', value: 'exit' }
                 ]
             }
         ])
@@ -56,7 +43,7 @@ function displayMenu() {
                     break;
                 case 'exit':
                     pool.end();
-                    break;
+                    process.exit();
             }
         });
 }
@@ -73,7 +60,7 @@ function showDepartments(departments, title) {
     departments.forEach((entry) => {
         t.cell('Id', entry.department_id);
         t.cell('Name', entry.department_name);
-        t.cell('Over Head %', entry.over_head_costs, Table.number(2));
+        t.cell('Over Head %', entry.over_head_costs, Table.number());
         t.newRow();
     });
 
@@ -121,7 +108,8 @@ function departmentSummary() {
         'd.department_name name,',
         'd.over_head_costs over_head,',
         'SUM(p.product_sales) as product_sales,',
-        '(p.product_sales - (p.product_sales * (d.over_head_costs / 100)))',
+        '(SUM(p.product_sales) -',
+        '(SUM(p.product_sales) * (d.over_head_costs / 100)))',
         'AS total_profit',
         'FROM departments d',
         'JOIN products p ON d.department_id = p.department_id',
@@ -139,7 +127,7 @@ function departmentSummary() {
         results.forEach((row) => {
             t.cell('Id', row.id);
             t.cell('Department', row.name);
-            t.cell('Over Head %', row.over_head, Table.number(2));
+            t.cell('Over Head %', row.over_head, Table.number());
             t.cell('Total Sales', row.product_sales, Table.number(2));
             t.cell('Total Profit', row.total_profit, Table.number(2));
             t.newRow();
