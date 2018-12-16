@@ -7,7 +7,8 @@
 
 const inquirer = require('inquirer');
 const Table = require('easy-table');
-const { pool } = require('./database');
+const figlet = require('figlet');
+const { pool, fconfig } = require('./config');
 
 /**
  * Display the items that are available for sale.
@@ -43,6 +44,7 @@ function displayProducts() {
         });
 
         console.clear();
+        console.log(figlet.textSync('Bamazon Customer', fconfig));
         console.log('\nProduct List\n');
         console.log(t.toString());
 

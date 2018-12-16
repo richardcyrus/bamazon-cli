@@ -7,7 +7,8 @@
 
 const inquirer = require('inquirer');
 const Table = require('easy-table');
-const { pool } = require('./database');
+const figlet = require('figlet');
+const { pool, fconfig } = require('./config');
 
 /**
  * Show the primary menu for the application.
@@ -67,6 +68,7 @@ function showProductsTable(products, title) {
     });
 
     console.clear();
+    console.log(figlet.textSync('Bamazon Manager', fconfig));
     console.log(`\n${title}\n`);
     console.log(t.toString());
 }
@@ -158,7 +160,7 @@ function modifyStock(products) {
                             return true;
                         } else {
                             return [
-                                'You have entered an invalid product Id.' +
+                                'You have entered an invalid product Id.',
                                 'Try again.',
                             ].join(' ');
                         }
@@ -232,6 +234,8 @@ function addProduct() {
     });
 
     console.clear();
+    console.log(figlet.textSync('Bamazon Manager', fconfig));
+
     inquirer
         .prompt([
             {
@@ -241,7 +245,7 @@ function addProduct() {
                 validate: function(value) {
                     if (value.length > 50) {
                         return [
-                            'Please enter a name that is shorter than¬',
+                            'Please enter a name that is shorter than',
                             '50 characters.'
                         ].join(' ');
                     }
@@ -289,4 +293,5 @@ function addProduct() {
 }
 
 // Start the application interaction.
+console.log(figlet.textSync('Bamazon Manager', fconfig));
 displayMenu();

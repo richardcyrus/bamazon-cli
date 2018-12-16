@@ -7,7 +7,8 @@
 
 const inquirer = require('inquirer');
 const Table = require('easy-table');
-const { pool } = require('./database');
+const figlet = require('figlet');
+const { pool, fconfig } = require('./config');
 
 /**
  * Show the primary menu for the application.
@@ -65,6 +66,7 @@ function showDepartments(departments, title) {
     });
 
     console.clear();
+    console.log(figlet.textSync('Bamazon Supervisor', fconfig));
     console.log(`\n${title}\n`);
     console.log(t.toString());
 }
@@ -134,6 +136,7 @@ function departmentSummary() {
         });
 
         console.clear();
+        console.log(figlet.textSync('Bamazon Supervisor', fconfig));
         console.log('\nView Products Sales by Department\n');
         console.log(t.toString());
 
@@ -151,6 +154,8 @@ function addDepartment() {
     ].join(' ');
 
     console.clear();
+    console.log(figlet.textSync('Bamazon Supervisor', fconfig));
+
     inquirer
         .prompt([
             {
@@ -193,4 +198,5 @@ function addDepartment() {
 }
 
 // Start the application interaction.
+console.log(figlet.textSync('Bamazon Supervisor', fconfig));
 displayMenu();

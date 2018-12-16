@@ -16,3 +16,7 @@ exports.pool = mysql.createPool({
     port: '/tmp/mysql.sock',
     // debug: ['ComQueryPacket', 'RowDataPacket']
 });
+
+exports.fconfig = {
+    font: 'Stick Letters'
+};

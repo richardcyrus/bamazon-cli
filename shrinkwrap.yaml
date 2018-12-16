@@ -1,6 +1,7 @@
 dependencies:
   dotenv: 6.2.0
   easy-table: 1.1.1
+  figlet: 1.2.1
   inquirer: 6.2.1
   mysql: 2.16.0
 devDependencies:
@@ -467,6 +468,12 @@ packages:
     dev: true
     resolution:
       integrity: sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
+  /figlet/1.2.1:
+    dev: false
+    engines:
+      node: '>= 0.4.0'
+    resolution:
+      integrity: sha512-qc8gycfnnfOmfvPl7Fi3JeTbcvdmbZkckyUVGGAM02je7Ookvu+bBfKy1I4FKqTsQHCs3ARJ76ip/k98r+OQuQ==
   /figures/2.0.0:
     dependencies:
       escape-string-regexp: 1.0.5
@@ -1220,5 +1227,6 @@ specifiers:
   eslint-plugin-node: ^8.0.0
   eslint-plugin-promise: ^4.0.1
   eslint-plugin-standard: ^4.0.0
+  figlet: ^1.2.1
   inquirer: ^6.2.1
   mysql: ^2.16.0
