@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS products (
     PRIMARY KEY (item_id)
 ) ENGINE = INNODB;
 
-INSERT INTO products (product_name, department_name, price, stock_stock_quantity)
+INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUES ('Snow Brush & Scraper', 'Automotive Parts & Accessories', 9.09, 15),
        ('Bluetooth FM Transmitter', 'Automotive Parts & Accessories', 18.99, 10),
        ('All-Season Windshield Wiper Blades', 'Automotive Parts & Accessories', 18.99, 5),
