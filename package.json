@@ -4,35 +4,53 @@
   "description": "",
   "main": "bamazonCustomer.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "format": "prettier --ignore-path .gitignore --write .",
+    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint --ignore-path .gitignore .",
+    "lint:fix": "eslint --cache --cache-location ./node_modules/.cache/eslint --ignore-path .gitignore --fix ."
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/richardcyrus/bamazon-cli.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Richard Cyrus <richard.cyrus@rcyrus.com> (https://www.richardcyrus.com)",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/richardcyrus/bamazon-cli/issues"
   },
   "homepage": "https://github.com/richardcyrus/bamazon-cli#readme",
   "dependencies": {
-    "dotenv": "^8.2.0",
-    "easy-table": "^1.1.1",
-    "figlet": "^1.5.0",
-    "inquirer": "^7.3.1",
+    "dotenv": "^16.0.1",
+    "easy-table": "^1.2.0",
+    "figlet": "^1.5.2",
+    "inquirer": "^8.2.4",
     "mysql": "^2.18.1"
   },
   "devDependencies": {
-    "eslint": "^7.4.0",
-    "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.22.0",
+    "eslint": "^8.15.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.0.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1"
+    "eslint-plugin-promise": "^6.0.0",
+    "prettier": "^2.6.2"
   },
   "engines": {
-    "node": "~10.21.0"
+    "node": "~16.15.0"
+  },
+  "prettier": {
+    "arrowParens": "always",
+    "embeddedLanguageFormatting": "auto",
+    "htmlWhitespaceSensitivity": "css",
+    "insertPragma": false,
+    "bracketSameLine": false,
+    "proseWrap": "preserve",
+    "requirePragma": false,
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "useTabs": false
   }
 }
